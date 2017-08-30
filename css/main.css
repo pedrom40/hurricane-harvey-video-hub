@@ -1,13 +1,56 @@
+/* tag overrides */
 body {
   font-family:"Roboto", sans-serif;
   color:#252525;
 }
 
-header {
-  margin-bottom:40px;
-  background:#ccc;
+h1 {
+  margin-bottom: 0;
+  text-align:center;
 }
 
 img {
 	width:100%;
+}
+
+ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+  li {
+    min-height:85px;
+    margin-bottom:15px;
+  }
+
+/* styles */
+.search-form {
+  width:500px;
+  margin:40px auto;
+}
+  .search-form input {
+    width:92%;
+  }
+
+.main-video .views {
+  float: right;
+}
+
+  .most-viewed h4 {
+  margin-top:0;
+}
+
+  .video-thumb .thumb {
+  float:left;
+  width:40%;
+}
+.video-thumb .desc {
+  float:right;
+  width:50%;
+  font-size:12px;
+}
+
+  /* reusables */
+.hide {
+  display:none;
 }
