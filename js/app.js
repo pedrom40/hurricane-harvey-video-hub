@@ -5,7 +5,6 @@ const presetSearchTerms = ['flooding', 'relief', 'forecast'];
 
 // call all necessary functions to load the page
 function initApp () {
-  console.log('init app called');
 
   // get most viewied videos, before user search, just send main theme as "q"
   getMostViewedVideos(theme);
@@ -19,7 +18,6 @@ function initApp () {
 
 // call api for most viewed videos
 function getMostViewedVideos (q) {
-  console.log(`getMostViewedVideos() called with search term: ${q}`);
 
   // call youtube API with 'q' parameter
   callYouTubeAPI(q, listMostViewedVideos);
@@ -28,52 +26,85 @@ function getMostViewedVideos (q) {
 
 // gets filtered videos, starts with preset search terms
 function getFilteredVideos (q) {
-  console.log(`getFilteredVideos() called with: ${q}`);
 
   // call youtube API with themified search term
   callYouTubeAPI (forceThemedSearchTerm(q), listFilteredVideos);
 
 }
 
-// function that lists filtered results
-function listFilteredVideos (data) {
-  console.log(`listFilteredVideos() called with:`);
-  console.log(data);
-
-  // loop over data to fill ul
-
-}
-
-// force theme to be first part of search term
-function forceThemedSearchTerm (q) {
-
-  // concat theme in front of search term
-  return `${theme}+${q}`;
-
-}
-
-// populate most viewed videos list
+// populate most viewed videos list, on load, used to set main video content
 function listMostViewedVideos (data) {
-  console.log('listMostViewedVideos() called with the following data:');
-  console.log(data);
 
   // loop thru data to create most viewed ul li's
+  data.items.map( (item, index) => {
 
-    // on first pass, set main video content
-    setMainVideo('videoObj');
+    // if first item, send to main video
+    if (index === 0){
+      setMainVideo(item);
+    }
 
-  // end loop
+    // setup li html with data
+    const template = `
+      <li>
+        <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
+          <div class="video-thumb">
+            <div class="desc">${trimVideoDescription (item.snippet.title.toString(), 49)}</div>
+            <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
+          </div>
+        </a>
+      </li>
+    `;
+
+    // append li to ul
+    $('.js-most-viewed-list').append(template);
+
+  });
+
+}
+
+// function that lists filtered results
+function listFilteredVideos (data) {
+
+  // loop thru data to create most viewed ul li's
+  data.items.map( (item, index) => {
+
+    // setup li html with data
+    const template = `
+      <li>
+        <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
+          <div class="video-thumb">
+            <div class="desc">${trimVideoDescription (item.snippet.title.toString(), 49)}</div>
+            <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
+          </div>
+        </a>
+      </li>
+    `;
+
+    // append li to ul
+    $(`.js-${index}-list`).append(template);
+
+  });
 
 }
 
 // populates main video content
 function setMainVideo (videoObj) {
-  console.log('setMainVideo() called');
+  console.log(videoObj);
+
+  // set template
+  const template = `
+    <header><h4>${videoObj.snippet.title}</h4></header>
+    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.id.videoId}" frameborder="0" allowfullscreen></iframe>
+    <h3>From: ${videoObj.snippet.channelTitle}</h3>
+    <p>${videoObj.snippet.description}</p>
+  `;
+
+  $('.video-player').append(template);
 }
+
 
 // calls youtube API with search term and credentials
 function callYouTubeAPI (q, callback) {
-  console.log(`callYouTubeAPI called with search term: ${q} and callback function: listMostViewedVideos()`);
 
   // set API call parameters
   const settings = {
@@ -91,6 +122,19 @@ function callYouTubeAPI (q, callback) {
 
   $.ajax(settings);
 
+}
+
+// force theme to be first part of search term
+function forceThemedSearchTerm (q) {
+
+  // concat theme in front of search term
+  return `${theme}+${q}`;
+
+}
+
+// trim the video description for preview lists
+function trimVideoDescription (description, trimAt) {
+  return `${description.substring(0, trimAt)}...`;
 }
 
 $(initApp)
