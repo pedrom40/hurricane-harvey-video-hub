@@ -17,6 +17,9 @@ function initApp () {
   // listen for search
   listenForSearchFormSubmit();
 
+  // listen for preview clicks
+  listenForPreviewClicks();
+
 }
 
 
@@ -24,7 +27,7 @@ function initApp () {
 function getMostViewedVideos (q) {
 
   // call youtube API with 'q' parameter
-  callYouTubeAPI(q, listMostViewedVideos);
+  callYouTubeSearchAPI(q, listMostViewedVideos);
 
 }
 
@@ -32,7 +35,7 @@ function getMostViewedVideos (q) {
 function getFilteredVideos (q) {
 
   // call youtube API with themified search term
-  callYouTubeAPI (forceThemedSearchTerm(q), listFilteredVideos);
+  callYouTubeSearchAPI (forceThemedSearchTerm(q), listFilteredVideos);
 
 }
 
@@ -54,7 +57,7 @@ function listMostViewedVideos (data) {
     // setup li html with data
     const template = `
       <li>
-        <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
+        <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
             <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
@@ -79,7 +82,7 @@ function listFilteredVideos (data) {
     // setup li html with data
     const template = `
       <li>
-        <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
+        <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
             <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
@@ -109,7 +112,7 @@ function listenForSearchFormSubmit () {
     const searchTerm = forceThemedSearchTerm(searchTermPassed);
 
     // call to API, reset most viewed content with search results
-    callYouTubeAPI(searchTerm, listMostViewedVideos);
+    callYouTubeSearchAPI(searchTerm, listMostViewedVideos);
 
     // update most viewed header
     $('.js-most-viewed-list-header').html(`Results for: ${trimString(searchTermPassed, 15)}`);
@@ -118,6 +121,40 @@ function listenForSearchFormSubmit () {
     $('#searchTerm').val('');
 
   });
+
+}
+
+// process thumbnail clicks, set as main video
+function listenForPreviewClicks () {
+
+  $('ul').click( event => {
+    event.preventDefault();
+
+    // get a tag info
+    const anchorClicked = $(event.target).closest('a');
+
+    // call video api
+    callYouTubeVideoAPI(anchorClicked[0].attributes.videoID.value, updateMainVideoFromAnchorClick);
+
+  });
+
+}
+
+// reset main video content from anchor link
+function updateMainVideoFromAnchorClick (videoObj) {
+
+  // reset html to start fresh
+  resetHTML('.video-player');
+
+  // set template
+  const template = `
+    <header><h4 class="js-main-video-title">${trimString(videoObj.items[0].snippet.title, 75)}</h4></header>
+    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.items[0].id}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    <h3 class="js-main-video-channel">From: ${videoObj.items[0].snippet.channelTitle}</h3>
+    <p class="js-main-video-description">${videoObj.items[0].snippet.description}</p>
+  `;
+
+  $('.video-player').append(template);
 
 }
 
@@ -140,8 +177,8 @@ function setMainVideo (videoObj) {
 }
 
 
-// calls youtube API with search term and credentials
-function callYouTubeAPI (q, callback) {
+// calls youtube search API with search term and credentials
+function callYouTubeSearchAPI (q, callback) {
 
   // set API call parameters
   const settings = {
@@ -151,6 +188,26 @@ function callYouTubeAPI (q, callback) {
       key: 'AIzaSyBAPx_IKzkO0KLZ9TOGGcLTUixNZmFRiX4',
       q: q,
       order: 'viewCount'
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: callback
+  };
+
+  $.ajax(settings);
+
+}
+
+// calls youtube search API with search term and credentials
+function callYouTubeVideoAPI (videoID, callback) {
+
+  // set API call parameters
+  const settings = {
+    url: 'https://www.googleapis.com/youtube/v3/videos',
+    data: {
+      part: 'snippet,contentDetails,statistics',
+      key: 'AIzaSyBAPx_IKzkO0KLZ9TOGGcLTUixNZmFRiX4',
+      id: videoID
     },
     dataType: 'json',
     type: 'GET',
