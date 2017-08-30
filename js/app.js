@@ -14,7 +14,11 @@ function initApp () {
     getFilteredVideos(term);
   });
 
+  // listen for search
+  listenForSearchFormSubmit();
+
 }
+
 
 // call api for most viewed videos
 function getMostViewedVideos (q) {
@@ -32,8 +36,12 @@ function getFilteredVideos (q) {
 
 }
 
+
 // populate most viewed videos list, on load, used to set main video content
 function listMostViewedVideos (data) {
+
+  // clear most viewed html to start fresh
+  resetHTML('.js-most-viewed-list');
 
   // loop thru data to create most viewed ul li's
   data.items.map( (item, index) => {
@@ -48,7 +56,7 @@ function listMostViewedVideos (data) {
       <li>
         <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
-            <div class="desc">${trimVideoDescription (item.snippet.title.toString(), 49)}</div>
+            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
           </div>
         </a>
@@ -73,7 +81,7 @@ function listFilteredVideos (data) {
       <li>
         <a href="#" data-id="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
-            <div class="desc">${trimVideoDescription (item.snippet.title.toString(), 49)}</div>
+            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
           </div>
         </a>
@@ -87,19 +95,48 @@ function listFilteredVideos (data) {
 
 }
 
+
+// listen for search submit event
+function listenForSearchFormSubmit () {
+
+  $('.search-form').submit( event => {
+    event.preventDefault();
+
+    // search term passed
+    const searchTermPassed = $('#searchTerm').val();
+
+    // setup forced theme search
+    const searchTerm = forceThemedSearchTerm(searchTermPassed);
+
+    // call to API, reset most viewed content with search results
+    callYouTubeAPI(searchTerm, listMostViewedVideos);
+
+    // update most viewed header
+    $('.js-most-viewed-list-header').html(`Results for: ${trimString(searchTermPassed, 15)}`);
+
+    // clear input
+    $('#searchTerm').val('');
+
+  });
+
+}
+
 // populates main video content
 function setMainVideo (videoObj) {
-  console.log(videoObj);
+
+  // reset html to start fresh
+  resetHTML('.video-player');
 
   // set template
   const template = `
-    <header><h4>${videoObj.snippet.title}</h4></header>
-    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.id.videoId}" frameborder="0" allowfullscreen></iframe>
-    <h3>From: ${videoObj.snippet.channelTitle}</h3>
-    <p>${videoObj.snippet.description}</p>
+    <header><h4 class="js-main-video-title">${videoObj.snippet.title}</h4></header>
+    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.id.videoId}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    <h3 class="js-main-video-channel">From: ${videoObj.snippet.channelTitle}</h3>
+    <p class="js-main-video-description">${videoObj.snippet.description}</p>
   `;
 
   $('.video-player').append(template);
+
 }
 
 
@@ -133,8 +170,13 @@ function forceThemedSearchTerm (q) {
 }
 
 // trim the video description for preview lists
-function trimVideoDescription (description, trimAt) {
-  return `${description.substring(0, trimAt)}...`;
+function trimString (str, trimAt) {
+  return `${str.substring(0, trimAt)}...`;
+}
+
+// reset element HTML
+function resetHTML (element) {
+  $(element).html('');
 }
 
 $(initApp)
