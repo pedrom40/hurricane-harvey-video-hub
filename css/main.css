@@ -23,6 +23,10 @@ hr {
 }
 
 /* styles */
+.search-history {
+  display:none;
+}
+
 .page-header {
   height:175px;
   padding:25px;
@@ -80,7 +84,7 @@ hr {
 .video-thumb .desc {
   float:right;
   width:50%;
-  font-size:12px;
+  font-size:16px;
 }
 
 .video-search-presets ul li {
@@ -96,4 +100,97 @@ footer {
   /* reusables */
 .hide {
   display:none;
+}
+
+/* tablets */
+@media only screen and (min-width: 768px) {
+
+  h1 {
+    font-size:24px;
+  }
+
+  .page-header {
+    height:85px;
+  }
+
+  .main-video div.row {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ccc;
+  }
+
+  .video-player, .most-viewed, .video-search-presets .col-4 {
+    margin:0;
+    padding:0;
+    border-bottom: none;
+  }
+
+  .most-viewed ul li {
+    min-height:71px;
+  }
+
+  .video-search-presets ul li {
+    height:90px;
+    padding-right:15px;
+  }
+
+  .video-thumb .desc {
+    font-size:10px;
+  }
+
+  footer {
+    margin-top:25px;
+    padding-top:10px;
+    padding-bottom:15px;
+    border-top:solid 1px #ccc;
+  }
+
+}
+
+/* desktops */
+@media only screen and (min-width: 1024px) {
+
+  h1 {
+    font-size:28px;
+    text-align:left;
+  }
+
+  .most-viewed ul li {
+    min-height:91px;
+  }
+
+  .video-search-presets ul li {
+    height:115px;
+  }
+
+  .video-thumb .desc {
+    width:52%;
+    font-size:14px;
+  }
+
+  footer {
+    width:1000px;
+    margin-right:auto;
+    margin-left:auto;
+  }
+
+}
+
+/* large monitors */
+@media only screen and (min-width: 1400px) {
+
+  .search-history {
+    display:block;
+    float: right;
+    width:320px;
+  }
+  .search-history ul {
+    list-style:disc;
+    margin-left:15px;
+    padding-left:15px;
+  }
+  .search-history ul li {
+    padding:5px 0;
+  }
+
 }
