@@ -59,7 +59,7 @@ function listMostViewedVideos (data) {
       <li>
         <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
-            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
+            <div class="desc">${trimString(item.snippet.title.toString(), 59)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
           </div>
         </a>
@@ -84,7 +84,7 @@ function listFilteredVideos (data) {
       <li>
         <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
           <div class="video-thumb">
-            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
+            <div class="desc">${trimString(item.snippet.title.toString(), 99)}</div>
             <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
           </div>
         </a>
@@ -149,12 +149,17 @@ function updateMainVideoFromAnchorClick (videoObj) {
   // set template
   const template = `
     <header><h4 class="js-main-video-title">${trimString(videoObj.items[0].snippet.title, 75)}</h4></header>
-    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.items[0].id}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    <div class="iframe-container">
+      <iframe width="320" height="180" src="https://www.youtube.com/embed/${videoObj.items[0].id}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    </div>
     <h3 class="js-main-video-channel">From: ${videoObj.items[0].snippet.channelTitle}</h3>
     <p class="js-main-video-description">${videoObj.items[0].snippet.description}</p>
   `;
 
   $('.video-player').append(template);
+
+  // scroll to top of page
+  $(window).scrollTop(0);
 
 }
 
@@ -167,7 +172,9 @@ function setMainVideo (videoObj) {
   // set template
   const template = `
     <header><h4 class="js-main-video-title">${videoObj.snippet.title}</h4></header>
-    <iframe width="700" height="394" src="https://www.youtube.com/embed/${videoObj.id.videoId}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    <div class="iframe-container">
+      <iframe width="320" height="180" src="https://www.youtube.com/embed/${videoObj.id.videoId}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+    </div>
     <h3 class="js-main-video-channel">From: ${videoObj.snippet.channelTitle}</h3>
     <p class="js-main-video-description">${videoObj.snippet.description}</p>
   `;

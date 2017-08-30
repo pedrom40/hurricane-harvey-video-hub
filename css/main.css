@@ -4,6 +4,10 @@ body {
   color:#252525;
 }
 
+h4 {
+  margin-top:0;
+}
+
 img {
 	width:100%;
 }
@@ -14,41 +18,59 @@ ul {
   padding:0;
 }
 
-/* styles */
+hr {
+  margin-top:15px;
+}
 
+/* styles */
 .page-header {
-  height:85px;
+  height:175px;
   padding:25px;
+  text-align:center;
   color:white;
   background:#ff0000;
 }
-  .page-header h1 {
-    margin:0;
-    vertical-align: middle;
-  }
+.page-header h1 {
+  margin:0 0 25px 0;
+ }
 
-  .page-header .search-form {
-    width:100%;
-    vertical-align: middle;
-  }
-    .page-header .search-form input, .page-header .search-form button {
-      height:34px;
-      padding:5px 8px;
-    }
-    .page-header .search-form input {
-      width:92%;
-    }
+.page-header .search-form {
+  width:100%;
+}
+.page-header .search-form input, .page-header .search-form button {
+  height:34px;
+  padding:5px 8px;
+}
+.page-header .search-form input {
+  width:85%;
+}
 
 .main-video {
   margin-top:40px;
 }
-
-.most-viewed ul li {
-  min-height:82px;
+.iframe-container {
+  position:relative;
+  padding-bottom:56.25%;
+  padding-top:35px;
+  height:0;
+  overflow:hidden;
+}
+.iframe-container iframe {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
 }
 
-.video-player h4, .most-viewed h4 {
-  margin-top:0;
+.video-player, .most-viewed, .video-search-presets .col-4 {
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #ccc;
+}
+
+.most-viewed ul li {
+  min-height:125px;
 }
 
 .video-thumb .thumb {
@@ -63,6 +85,12 @@ ul {
 
 .video-search-presets ul li {
   height:120px;
+}
+
+footer {
+  padding-bottom:25px;
+  font-size:12px;
+  text-align:center;
 }
 
   /* reusables */
