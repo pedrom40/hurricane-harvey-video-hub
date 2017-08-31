@@ -2,7 +2,7 @@
 
 Focuses on providing up-to-date news reports from reliable news organizations and your friends as the main sources. Viewing public social media post is an option, however you must agree to a warning first.
 
-Features:
+## Features:
 
 * YouTube videos from reliable news sources only
 * Facebook and Twitter posts from people you follow
