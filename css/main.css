@@ -47,6 +47,16 @@ hr {
 }
 .page-header .search-form input {
   width:85%;
+  border:none;
+  box-shadow:2px 2px 5px #999;
+}
+.page-header .search-form button {
+  background:transparent;
+  color:#999;
+  border:none;
+  margin-left:-40px;
+  padding:0 12px;
+  border-radius:0;
 }
 
 .main-video {
