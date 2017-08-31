@@ -130,37 +130,6 @@ function listenForSearchFormSubmit () {
 
 }
 
-// adds all search terms to history for easy access
-function addSearchTermToHistory (searchTerm) {
-
-  // loop thru history looking for same term
-  const historyBtns = $('.js-search-history').find('a');
-  let searchTermMatch = false;
-
-  historyBtns.map( item => {
-
-    // if a match is found
-    if ($(historyBtns[item]).html() === searchTerm) {
-      searchTermMatch = true;
-    }
-
-  });
-
-  // if no matches found, then add term to history
-  if (!searchTermMatch) {
-
-    // create li template
-    const template = `
-    <p><a href="#" class="js-history-btn">${searchTerm}</a></p>
-    `;
-
-    // append to history list
-    $('.js-search-history').append(template);
-
-  }
-
-}
-
 // processes search history btn clicks
 function listenForHistoryClicks () {
 
@@ -191,6 +160,7 @@ function listenForPreviewClicks () {
   });
 
 }
+
 
 // reset main video content from anchor link
 function updateMainVideoFromAnchorClick (videoObj) {
@@ -235,6 +205,37 @@ function setMainVideo (videoObj) {
 
 }
 
+// adds all search terms to history for easy access
+function addSearchTermToHistory (searchTerm) {
+
+  // loop thru history looking for same term
+  const historyBtns = $('.js-search-history').find('a');
+  let searchTermMatch = false;
+
+  historyBtns.map( item => {
+
+    // if a match is found
+    if ($(historyBtns[item]).html() === searchTerm) {
+      searchTermMatch = true;
+    }
+
+  });
+
+  // if no matches found, then add term to history
+  if (!searchTermMatch) {
+
+    // create li template
+    const template = `
+    <p><a href="#" class="js-history-btn">${searchTerm}</a></p>
+    `;
+
+    // append to history list
+    $('.js-search-history').append(template);
+
+  }
+
+}
+
 
 // calls youtube search API with search term and credentials
 function callYouTubeSearchAPI (q, callback) {
@@ -276,6 +277,7 @@ function callYouTubeVideoAPI (videoID, callback) {
   $.ajax(settings);
 
 }
+
 
 // force theme to be first part of search term
 function forceThemedSearchTerm (q) {
