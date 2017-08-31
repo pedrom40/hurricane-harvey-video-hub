@@ -8,8 +8,7 @@ Focuses on providing up-to-date news reports from reliable news organizations an
 * Facebook and Twitter posts from people you follow
 * Information for how you can help, locally and nationally
 
-Things to Do
-------------
+### Things to Do
 
 1. Make main video column "Most Recent"
 2. Make "Flooding" column "Most Viewed"
