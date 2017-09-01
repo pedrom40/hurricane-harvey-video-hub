@@ -49,55 +49,97 @@ function listMostViewedVideos (data) {
   // clear most viewed html to start fresh
   resetHTML('.js-most-viewed-list');
 
-  // loop thru data to create most viewed ul li's
-  data.items.map( (item, index) => {
+  // if an error occurred
+  if (typeof textStatus !== 'undefined') {
 
-    // if first item, send to main video
-    if (index === 0){
-      setMainVideo(item);
-    }
+    // let user know
+    showAjaxError('.js-most-viewed-list', textStatus);
 
-    // setup li html with data
-    const template = `
-      <li>
-        <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
-          <div class="video-thumb">
-            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
-            <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
-          </div>
-        </a>
-      </li>
-    `;
+  }
 
-    // append li to ul
-    $('.js-most-viewed-list').append(template);
+  // if no results returned
+  else if (data.items.length === 0) {
 
-  });
+    // let user know
+    $('.js-most-viewed-list').append('Sorry, no results found for your search. Please try again.');
+
+  }
+
+  // if results found
+  else {
+
+    // loop thru data to create most viewed ul li's
+    data.items.map( (item, index) => {
+
+      // if first item, send to main video
+      if (index === 0){
+        setMainVideo(item);
+      }
+
+      // setup li html with data
+      const template = `
+        <li>
+          <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
+            <div class="video-thumb">
+              <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
+              <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
+            </div>
+          </a>
+        </li>
+      `;
+
+      // append li to ul
+      $('.js-most-viewed-list').append(template);
+
+    });
+
+  }
 
 }
 
 // function that lists filtered results
 function listFilteredVideos (data) {
 
-  // loop thru data to create most viewed ul li's
-  data.items.map( (item, index) => {
+  // if an error occurred
+  if (typeof textStatus !== 'undefined') {
 
-    // setup li html with data
-    const template = `
-      <li>
-        <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
-          <div class="video-thumb">
-            <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
-            <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
-          </div>
-        </a>
-      </li>
-    `;
+    // let user know
+    showAjaxError(`.js-${index}-list`, textStatus);
 
-    // append li to ul
-    $(`.js-${index}-list`).append(template);
+  }
 
-  });
+  // if no results returned
+  else if (data.items.length === 0) {
+
+    // let user know
+    $(`.js-${index}-list`).append('Sorry, no results found for this search.');
+
+  }
+
+  // if results found
+  else {
+
+    // loop thru data to create most viewed ul li's
+    data.items.map( (item, index) => {
+
+      // setup li html with data
+      const template = `
+        <li>
+          <a href="#" videoID="${item.id.videoId}" class="js-preview-btn">
+            <div class="video-thumb">
+              <div class="desc">${trimString(item.snippet.title.toString(), 49)}</div>
+              <div class="thumb"><img src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title} image"></div>
+            </div>
+          </a>
+        </li>
+      `;
+
+      // append li to ul
+      $(`.js-${index}-list`).append(template);
+
+    });
+
+  }
 
 }
 
@@ -251,14 +293,15 @@ function callYouTubeSearchAPI (q, callback) {
     },
     dataType: 'json',
     type: 'GET',
-    success: callback
+    success: callback,
+    fail: callback
   };
 
   $.ajax(settings);
 
 }
 
-// calls youtube search API with search term and credentials
+// calls youtube video search by video ID
 function callYouTubeVideoAPI (videoID, callback) {
 
   // set API call parameters
@@ -271,10 +314,18 @@ function callYouTubeVideoAPI (videoID, callback) {
     },
     dataType: 'json',
     type: 'GET',
-    success: callback
+    success: callback,
+    fail: callback
   };
 
   $.ajax(settings);
+
+}
+
+// show ajax error
+function showAjaxError (element, errorMsg) {
+
+  $(element).html(`Search Failed: ${errorMsg}`);
 
 }
 
