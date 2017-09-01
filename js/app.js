@@ -214,7 +214,7 @@ function updateMainVideoFromAnchorClick (videoObj) {
   const template = `
     <header><h4 class="js-main-video-title">${trimString(videoObj.items[0].snippet.title, 49)}</h4></header>
     <div class="iframe-container">
-      <iframe width="320" height="180" src="https://www.youtube.com/embed/${videoObj.items[0].id}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
+      <iframe title="YouTube Video Frame" width="320" height="180" src="https://www.youtube.com/embed/${videoObj.items[0].id}" frameborder="0" class="js-main-video-iframe" allowfullscreen></iframe>
     </div>
     <h3 class="js-main-video-channel">From: ${videoObj.items[0].snippet.channelTitle}</h3>
     <p class="js-main-video-description">${videoObj.items[0].snippet.description}</p>
