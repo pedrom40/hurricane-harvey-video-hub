@@ -289,6 +289,7 @@ function callYouTubeSearchAPI (q, callback) {
       part: 'snippet',
       key: 'AIzaSyBAPx_IKzkO0KLZ9TOGGcLTUixNZmFRiX4',
       q: q,
+      type: 'video',
       order: 'viewCount'
     },
     dataType: 'json',
